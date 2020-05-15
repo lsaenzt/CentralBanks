@@ -1,4 +1,4 @@
-function BdE_InterestRates(from::Date; ruta::String="") 
+function InterestRates(from::Date; dir::String="") 
 
     #Descarga de ficheros desde la página del Banco de España
     tempIO=IOBuffer()

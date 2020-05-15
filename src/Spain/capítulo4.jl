@@ -1,4 +1,4 @@
-function BdE_be04(from::Date; dir::String="") 
+function be04(from::Date; dir::String="") 
 
     #Downloads chapter 4 files from Bank of Spain
     file = HTTP.get("https://www.bde.es/webbde/es/estadis/infoest/series/be04.zip").body
