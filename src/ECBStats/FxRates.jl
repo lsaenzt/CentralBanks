@@ -10,7 +10,7 @@ function ECB_FxRates(from::Date; dir::String="")
 
     FxHist = FxHist[FxHist[:,1].>=from,:]
 
-    ruta !="" && CSV.write(ruta*"/tDivisa.csv",FxHist,delim=";",decimal=',')
+    dir !="" && CSV.write(dir*"/tDivisa.csv",FxHist,delim=";",decimal=',')
 
     FxHist
 end

@@ -19,10 +19,10 @@ function BdE_InterestRates(from::Date; ruta::String="")
     IntHist = IntHist[(IntHist[:,1]).>=from,:]
     sort!(IntHist,1,rev=true)
 
-    ruta !="" && begin
+    dir !="" && begin
       UTF8_IO = IOBuffer()
       CSV.write(UTF8_IO,IntHist, delim=';',decimal=',',quotestrings=true)
-      file = open(ruta*"/tInteres.csv","w")
+      file = open(dir*"/tInteres.csv","w")
       encoder = StringEncoder(file, enc"Latin1")
       write(encoder,read(seekstart(UTF8_IO),String))
       close(encoder) #codifica el stream de datos en Latin1

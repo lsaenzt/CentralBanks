@@ -1,35 +1,22 @@
-function BdE_be04(from::Date, dir::String) 
+function BdE_be04(from::Date; dir::String="") 
 
-    cd(ruta)
-    pwd()
-    #Descarga de ficheros desde la página del Banco de España
+    #Downloads chapter 4 files from Bank of Spain
     file = HTTP.get("https://www.bde.es/webbde/es/estadis/infoest/series/be04.zip").body
-
-    r = ZipFile.Reader(IOBuffer(file));
-
-    for f in r.files
-        println("Filename: $(f.name)")
-        io = open("be04/"*f.name,"w") #Creación de fichero con nombre igual al del ZIP
-        write(io,read(f))
-        close(io)
-    end
-    close(r)
+    r = ZipFile.Reader(IOBuffer(file))
  
     #Definición de formato de fechas utilizado por Banco de España en su boletín estadístico
     bde_months = ["ENERO", "FEBRERO", "MARZO", "ABIRL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"]
     bde_monts_abbrev = ["ENE","FEB","MAR","ABR","MAY","JUN", "JUL","AGO","SEP","OCT","NOV","DIC"]
-
     Dates.LOCALES["BdE"] = Dates.DateLocale(bde_months,bde_monts_abbrev, [""],[""],)
-
     BdE_Format = DateFormat("uuu yyyy", "BdE") #Definición del formato de fechas utilizado por BdE
    
     File_Dict = Dict{String,DataFrame}() #Inicializo el Diccionario con los datos
 
     #Lectura datos ficheros BdE. La carpeta debe estar en una carpeta llamada "be04"
-    for file in readdir("be04")
-
+    for file in r.files
+        
         #Lectura fichero transformando Latin1 a UTF8      
-        tempdf = CSV.read(open("be04/"*file, enc"Latin1"), header=3, datarow=5, delim=',',quotechar='"',missingstring="_")
+        tempdf = CSV.read(read(StringDecoder(file, enc"Latin1")), header=3, datarow=5, delim=',',quotechar='"',missingstring="_")
         
         #Conversión de datos (distinguiendo cuando hay mes y año o sólo año)        
         if typeof(tempdf[1,1])==String 
@@ -43,16 +30,22 @@ function BdE_be04(from::Date, dir::String)
         tempdf = tempdf[(tempdf[:,1]).>=from,:]
            
         #Creación de Dict para guardar cada dataframe asociado al nombre del fichero según Banco de España
-        filename = file[1:length(file)-4]
-        push!(File_Dict,filename => tempdf)
-
+        push!(File_Dict,file.name[1:(end-4)] => tempdf)
     end #for
+    
+    dir !="" && begin 
+    for f in r.files
+        println("Filename: $(f.name)")
+        io = open(dir*"be04/"*f.name,"w") #Creación de fichero con nombre igual al del ZIP
+        write(io,read(f))
+        close(io)
+    end #for
+    end #begin
 
     File_Dict
-
 end #function
 
-function combinaciones(Files::Dict)
+function mergebe04(Files::Dict)
 
     #Cuenta de Resultados del Sector. Ojo! Incluye Sucursales en extranjero. Pensar si utilizar 4.41 que no las incluye
     PyG_Trim = copy(BdE_Files["be0436"]) #Orden de mayor a menor por primera columna (fecha)
