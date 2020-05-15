@@ -1,11 +1,9 @@
 module CentralBanks
 
-using CSV
-using StringEncodings #El fichero de BdE está en Latin1 no UTF8
+using CSV, StringEncodings #El fichero de BdE está en Latin1 no UTF8
 using Dates
 using DataFrames
-using HTTP
-using ZipFile
+using HTTP,ZipFile
 #using XLSX
 
 cd("//datos02/9763-AnalisisyPlanificacion_Financiera/7. Mercado/CentralBanks")

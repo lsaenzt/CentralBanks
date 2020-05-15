@@ -1,4 +1,4 @@
-function BdE_be04(ruta::String, from::DateTime) 
+function BdE_be04(from::Date, dir::String) 
 
     cd(ruta)
     pwd()

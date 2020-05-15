@@ -1,7 +1,4 @@
-function BdE_tiposInteres(ruta::String, from::Date) 
-
-    cd(ruta)
-    pwd()
+function BdE_InterestRates(from::Date; ruta::String="") 
 
     #Descarga de ficheros desde la página del Banco de España
     tempIO=IOBuffer()
@@ -22,13 +19,15 @@ function BdE_tiposInteres(ruta::String, from::Date)
     IntHist = IntHist[(IntHist[:,1]).>=from,:]
     sort!(IntHist,1,rev=true)
 
-    UTF8_IO = IOBuffer()
-    CSV.write(UTF8_IO,IntHist, delim=';',decimal=',',quotestrings=true)
-    file = open(ruta*"/tInteres.csv","w")
-    encoder = StringEncoder(file, enc"Latin1")
-    write(encoder,read(seekstart(UTF8_IO),String))
-    close(encoder) #codifica el stream de datos en Latin1
-    close(file) #graba el stream de datos
+    ruta !="" && begin
+      UTF8_IO = IOBuffer()
+      CSV.write(UTF8_IO,IntHist, delim=';',decimal=',',quotestrings=true)
+      file = open(ruta*"/tInteres.csv","w")
+      encoder = StringEncoder(file, enc"Latin1")
+      write(encoder,read(seekstart(UTF8_IO),String))
+      close(encoder) #codifica el stream de datos en Latin1
+      close(file) #graba el stream de datos
+    end
 
     IntHist
 end
