@@ -45,7 +45,7 @@ function BdE_be04(from::Date; dir::String="")
     File_Dict
 end #function
 
-function mergebe04(Files::Dict)
+function mergebe04(Files::Dict;dir::String="")
 
     #Cuenta de Resultados del Sector. Ojo! Incluye Sucursales en extranjero. Pensar si utilizar 4.41 que no las incluye
     PyG_Trim = copy(BdE_Files["be0436"]) #Orden de mayor a menor por primera columna (fecha)
@@ -61,7 +61,7 @@ function mergebe04(Files::Dict)
 
     #TODO 1: hay que pensar cómo trasponer los datos de forma más elegante!!!!
 
-    writeCSVTransposed(PyG_Acum,"PyG_Sector")
+    writeCSVTransposed(PyG_Acum,dir*"PyG_Sector")
 
     #Balance del Sector
 
@@ -91,7 +91,7 @@ function mergebe04(Files::Dict)
     Ratios_PyG.Comisiones_MB = PyG_Acum[:,r"Comisiones, neto"][:,1]./PyG_Acum[:,r"Margen bruto"][:,1]*100
     Ratios_PyG.ROF_MB = PyG_Acum[:,r"Otras operaciones financieras"][:,1]./PyG_Acum[:,r"Margen bruto"][:,1]*100
 
-    writeCSVTransposed(Ratios_PyG,"Ratios_PyG")
+    writeCSVTransposed(Ratios_PyG, dir*"Ratios_PyG")
 
     #=TODO
     Ratios s/ Balance -> Ingresos sobre préstamos, Costes sobre recursos, Coste Morosidad s/crédito, Otras Dotaciones s/crédito,
@@ -102,10 +102,8 @@ function mergebe04(Files::Dict)
     =#
 
     #Capacidad [Entidades y Oficinas]
-
     Capacidad_Sector = hcat(BdE_Files["be0445"],BdE_Files["be0447"][:,Not(1)])
-
     sort!(Capacidad_Sector,1,rev=true)
 
-    writeCSVTransposed(Capacidad_Sector,"Capacidad_Sector")
+    writeCSVTransposed(Capacidad_Sector,dir*"Capacidad_Sector")
 end #function
