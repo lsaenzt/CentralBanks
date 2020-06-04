@@ -1,4 +1,4 @@
-function InterestRates(from::Date; dir::String="") 
+function interestRates(from::Date; dir::String="") 
 
     #Descarga de ficheros desde la página del Banco de España
     tempIO=IOBuffer()

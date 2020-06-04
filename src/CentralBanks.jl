@@ -6,15 +6,17 @@ using DataFrames
 using HTTP,ZipFile
 #using XLSX
 
-include("BdEStats/capítulo4.jl")
-include("BdEStats/InteresRates.jl")
-include("ECBStats/FxRates.jl")
-include("BdEStats/utilidades.jl")
+include("Spain/capítulo4.jl")
+include("Spain/interestRates.jl")
+include("ECB/FxRates.jl")
+include("utilities.jl")
 
 end #module
 
-using CentralBanks
+using Main.CentralBanks, Dates
 
 BdE_be04("//datos02/9763-AnalisisyPlanificacion_Financiera/7. Mercado/Sector",Dates.Date(2005))
-BdE_tiposInteres("//datos02/9763-AnalisisyPlanificacion_Financiera/7. Mercado/Tipos",Dates.Date(2005))
-ECB_FxRates("//datos02/9763-AnalisisyPlanificacion_Financiera/7. Mercado/Tipos",Dates.Date(2005))
+CentralBanks.interestRates(Dates.Date(2005))
+CentralBanks.ECB_FxRates(Dates.Date(2005))
+
+delete!(DataFrame([[names(fxsmall)]; collect.(eachrow(fxsmall))], [Symbol(names(fxsmall)[1]) ; Symbol.(fxsmall[:,1])]),1)
