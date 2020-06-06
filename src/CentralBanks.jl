@@ -16,7 +16,5 @@ end #module
 using Main.CentralBanks, Dates
 
 BdE_be04("//datos02/9763-AnalisisyPlanificacion_Financiera/7. Mercado/Sector",Dates.Date(2005))
-CentralBanks.interestRates(Dates.Date(2005))
-CentralBanks.ECB_FxRates(Dates.Date(2005))
-
-delete!(DataFrame([[names(fxsmall)]; collect.(eachrow(fxsmall))], [Symbol(names(fxsmall)[1]) ; Symbol.(fxsmall[:,1])]),1)
+CentralBanks.interestRates(Dates.Date(2010))
+CentralBanks.ECB_FxRates(Dates.Date(2012))
