@@ -5,11 +5,11 @@ using Dates
 using DataFrames
 using HTTP, ZipFile
 
-cd(@__DIR__)
+dir = @__DIR__
 
-include("Spain/boletinEstadistico.jl")
-include("Spain/InterestRates.jl")
-include("ECB/FxRates.jl")
-include("utilidades.jl")
+include(joinpath(dir,"Spain/boletinEstadistico.jl"))
+include(joinpath(dir,"Spain/Rates.jl"))
+include(joinpath(dir,"ECB/FxRates.jl"))
+include(joinpath(dir,"utilidades.jl"))
 
 end #module
