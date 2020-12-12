@@ -1,4 +1,9 @@
-function interestRates(from::Date; dir::String="") 
+export BdE_tiposInteres
+
+function BdE_tiposInteres(ruta::String, from::Date) 
+
+    cd(ruta)
+    pwd()
 
     #Descarga de ficheros desde la página del Banco de España
     tempIO=IOBuffer()
@@ -10,24 +15,22 @@ function interestRates(from::Date; dir::String="")
 
     Dates.LOCALES["BdE"] = Dates.DateLocale(bde_months,bde_monts_abbrev, [""],[""],)
 
-    BdE_Format = DateFormat("dd uuuyyyy", "BdE") #Definición del formato de fechas utilizado por BdE
+    BdE_Format = DateFormat("dd uuu yyyy", "BdE") #Definición del formato de fechas utilizado por BdE
 
     #Lectura fichero transformando Latin1 a UTF8
-    IntHist = CSV.read(read(StringDecoder(seekstart(tempIO), enc"Latin1")), header=3, datarow=5, delim=',',decimal='.',quotechar='"',
-                      missingstrings=["...","_"], dateformat=BdE_Format)
+    IntHist = CSV.File(read(StringDecoder(seekstart(tempIO), enc"Latin1")), header=4, datarow=7, delim=',',decimal='.',quotechar='"',
+                      missingstrings=["...","_"], footerskip=2, dateformat=BdE_Format) |> DataFrame
 
-    IntHist = IntHist[(IntHist[:,1]).>=from,:]
+    IntHist = IntHist[IntHist[:,1].>=from,:]
     sort!(IntHist,1,rev=true)
 
-    dir !="" && begin
-      UTF8_IO = IOBuffer()
-      CSV.write(UTF8_IO,IntHist, delim=';',decimal=',',quotestrings=true)
-      file = open(dir*"/tInteres.csv","w")
-      encoder = StringEncoder(file, enc"Latin1")
-      write(encoder,read(seekstart(UTF8_IO),String))
-      close(encoder) #codifica el stream de datos en Latin1
-      close(file) #graba el stream de datos
-    end
+    UTF8_IO = IOBuffer()
+    CSV.write(UTF8_IO,IntHist, delim=';',decimal=',',quotestrings=true)
+    file = open(ruta*"/tInteres.csv","w")
+    encoder = StringEncoder(file, enc"Latin1")
+    write(encoder,read(seekstart(UTF8_IO),String))
+    close(encoder) #codifica el stream de datos en Latin1
+    close(file) #graba el stream de datos
 
     IntHist
 end
