@@ -14,6 +14,7 @@ function downloadchapter(capitulo::Int, directory::String)
 
     n = lpad(capitulo,2,"0")
 
+    #TODO: sustituir por Dowwloads en base con 1.6 
     #Descarga de ficheros desde la página del Banco de España. Cambiar por 
     file = HTTP.get("https://www.bde.es/webbde/es/estadis/infoest/series/be"*n*".zip").body
 
@@ -35,7 +36,7 @@ end #function
 downloadchapter(f, chapter, dir)
 
 Downloads and unzips a complete chapter from Boletin Estadístico of Bank of Spain. 
-Then applies a function that acts on all the downloaded files
+Then applies a function that acts on the files on the same directory
 
 # Example
 
