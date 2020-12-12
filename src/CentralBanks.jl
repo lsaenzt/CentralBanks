@@ -7,9 +7,11 @@ using HTTP, ZipFile
 
 dir = @__DIR__
 
-include(joinpath(dir,"Spain/boletinEstadistico.jl"))
-include(joinpath(dir,"Spain/Rates.jl"))
-include(joinpath(dir,"ECB/FxRates.jl"))
-include(joinpath(dir,"utilidades.jl"))
+include(joinpath(dir,"src/Spain/boletinEstadistico.jl"))
+include(joinpath(dir,"src/Spain/Rates.jl"))
+include(joinpath(dir,"src/Spain/utilities.jl"))
+
+include(joinpath(dir,"src/ECB/FxRates.jl"))
+include(joinpath(dir,"src/utilities.jl"))
 
 end #module
