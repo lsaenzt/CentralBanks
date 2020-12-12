@@ -7,11 +7,9 @@ using HTTP, ZipFile
 
 cd(@__DIR__)
 
-include("src/BdEStats/capítulo4.jl")
-include("src/BdEStats/capítulo2.jl")
-include("src/BdEStats/capítulo19.jl")
-include("src/BdEStats/InterestRates.jl")
-include("src/ECBStats/FxRates.jl")
-include("src/utilidades.jl")
+include("Spain/boletinEstadistico.jl")
+include("Spain/InterestRates.jl")
+include("ECB/FxRates.jl")
+include("utilidades.jl")
 
 end #module
