@@ -49,6 +49,15 @@ function CSVtoDataFrame(directory::String,from::Date=Date(1900))
     File_Dict
 
 end
+"""
+Transpose a Dataframe
+"""
+
+function transposedf(df::DataFrame; columna1::Symbol = :Concepto)
+
+    DataFrame([[names(df[:,2:end])]; collect.(eachrow(df[:,2:end]))], [columna1;Symbol.(df[:,1])])
+
+end #function
 
 """
 
